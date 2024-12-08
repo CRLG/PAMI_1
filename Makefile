@@ -34,7 +34,7 @@ BUILD_DIR = build
 ######################################
 # ext libs path
 ######################################
-LIB_STM32 = ext/libElectrobotG431KB
+LIB_STM32 = ext/libElectrobotG431
 
 ######################################
 # source

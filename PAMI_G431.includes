@@ -1,8 +1,8 @@
 .
 ./Includes
-ext/libElectrobotG431KB/Core/Inc
-ext/libElectrobotG431KB/Drivers/STM32G4xx_HAL_Driver/Inc
-ext/libElectrobotG431KB/Drivers/STM32G4xx_HAL_Driver/Inc/Legacy
-ext/libElectrobotG431KB/Drivers/CMSIS/Device/ST/STM32G4xx/Include
-ext/libElectrobotG431KB/Drivers/CMSIS/Include
+ext/libElectrobotG431/Core/Inc
+ext/libElectrobotG431/Drivers/STM32G4xx_HAL_Driver/Inc
+ext/libElectrobotG431/Drivers/STM32G4xx_HAL_Driver/Inc/Legacy
+ext/libElectrobotG431/Drivers/CMSIS/Device/ST/STM32G4xx/Include
+ext/libElectrobotG431/Drivers/CMSIS/Include
 
