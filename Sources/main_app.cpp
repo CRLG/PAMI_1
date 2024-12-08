@@ -2,15 +2,12 @@
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "CGlobale.h"
 #include "retarget.h"
 
 CGlobale Application;
-//extern uint8_t tick;
 
+// --------------------------------------------------
 uint32_t ADC_ReadAnalog(uint32_t channel)
 {
 
@@ -34,16 +31,19 @@ uint32_t ADC_ReadAnalog(uint32_t channel)
 	return analog_value;
 }
 
+// --------------------------------------------------
+uint8_t uart_irq_rxbuff[1];
 void irq_uart2()
 {
-
+    HAL_UART_Transmit(&huart2, uart_irq_rxbuff, 1, 100);
+    HAL_UART_Receive_IT(&huart2, uart_irq_rxbuff, 1);
 }
 
-
-
+// =====================================================
 int main_app(void)
 {
   RetargetInit(&huart2);
+  HAL_UART_Receive_IT(&huart2, uart_irq_rxbuff, 1);
 
   Application.Run();
   while (1)
