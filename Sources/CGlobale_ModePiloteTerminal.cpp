@@ -94,6 +94,8 @@ void CGlobale::SequenceurModePiloteTerminal(void)
     cpt500msec++;
     if (cpt500msec >= TEMPO_500msec) {
         cpt500msec = 0;
+
+        toggleLedBuiltin();
     }
     // ______________________________
     cpt1sec++;

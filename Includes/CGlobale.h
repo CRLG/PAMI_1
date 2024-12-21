@@ -5,6 +5,7 @@
 #define _GLOBALE_H_
 
 #include "RessourcesHardware.h"
+#include "console_interactive_menu.h"
 
 typedef enum {
     MODE_AUTONOME = 0,
@@ -41,6 +42,8 @@ public :
 
     //! Point d'entree pour lancer l'application
     void Run(void);
+
+    CMenuApp m_menu_interactive;
 
 private : 
     //! Gestion du mode autonome

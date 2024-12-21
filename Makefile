@@ -41,12 +41,14 @@ LIB_STM32 = ext/libElectrobotG431
 ######################################
 # CPP sources
 CXX_SOURCES =  \
+ext/CppRobLib/ConsoleInteractiveMenu/console_interaction.cpp \
 Sources/main_app.cpp \
 Sources/CGlobale.cpp \
 Sources/CGlobale_ModeAutonome.cpp \
 Sources/CGlobale_ModePiloteLaBotBox.cpp \
 Sources/CGlobale_ModePiloteTerminal.cpp \
 Sources/RessourcesHardware.cpp \
+Sources/console_interactive_menu.cpp \
 
 # C sources
 C_SOURCES =  \
@@ -139,6 +141,7 @@ AS_INCLUDES =
 # C includes
 C_INCLUDES =  \
 -IIncludes \
+-Iext/CppRobLib/ConsoleInteractiveMenu \
 -I$(LIB_STM32)/Includes \
 -I$(LIB_STM32)/Core/Inc \
 -I$(LIB_STM32)/Drivers/STM32G4xx_HAL_Driver/Inc \
@@ -171,7 +174,7 @@ CXXFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 LDSCRIPT = $(LIB_STM32)/STM32G431KBTX_FLASH.ld
 
 # libraries
-LIBS = -lc -lm -lnosys 
+LIBS = -lc -lm -lnosys -lstdc++
 LIBDIR = 
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 

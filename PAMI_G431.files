@@ -10,8 +10,11 @@ Sources/RessourcesHardware.cpp
 Includes/main_app.h
 Sources/main_app.cpp
 
+Includes/console_interactive_menu.h
+Sources/console_interactive_menu.cpp
 
 ext/libElectrobotG431/startup_stm32h755xx_CM4.s
+ext/libElectrobotG431/Core/Src/main.c
 ext/libElectrobotG431/Core/Src/retarget.c
 ext/libElectrobotG431/Core/Src/main.cpp
 ext/libElectrobotG431/Core/Src/stm32g4xx_it.c
@@ -73,5 +76,7 @@ ext/libElectrobotG431/Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_tim_ex.h
 ext/libElectrobotG431/Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart.h
 ext/libElectrobotG431/Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
 
+ext/CppRobLib/ConsoleInteractiveMenu/console_interaction.h
+ext/CppRobLib/ConsoleInteractiveMenu/console_interaction.cpp
 
 
