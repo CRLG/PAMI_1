@@ -69,10 +69,16 @@ void CMenuApp::page_servos()
     DECLARE_ACTION('r', "Servo1 : 2000", CMenuApp::page_servo1_2000);
 
 
-    DECLARE_ACTION('q', "Servo1 : 1500", CMenuApp::page_servo2_1500);
-    DECLARE_ACTION('s', "Servo1 : 1200", CMenuApp::page_servo2_1200);
-    DECLARE_ACTION('d', "Servo1 : 1700", CMenuApp::page_servo2_1700);
-    DECLARE_ACTION('f', "Servo1 : 2000", CMenuApp::page_servo2_2000);
+    DECLARE_ACTION('q', "Servo2 : 1500", CMenuApp::page_servo2_1500);
+    DECLARE_ACTION('s', "Servo2 : 1200", CMenuApp::page_servo2_1200);
+    DECLARE_ACTION('d', "Servo2 : 1700", CMenuApp::page_servo2_1700);
+    DECLARE_ACTION('f', "Servo2 : 2000", CMenuApp::page_servo2_2000);
+
+    DECLARE_ACTION('w', "Servo3 : 1500", CMenuApp::page_servo3_1500);
+    DECLARE_ACTION('x', "Servo3 : 1200", CMenuApp::page_servo3_1200);
+    DECLARE_ACTION('c', "Servo3 : 1700", CMenuApp::page_servo3_1700);
+    DECLARE_ACTION('v', "Servo3 : 2000", CMenuApp::page_servo3_2000);
+
 }
 
 
@@ -272,6 +278,31 @@ bool CMenuApp::page_servo2_2000()
 }
 
 
+bool CMenuApp::page_servo3_1200()
+{
+    CdeServo3(1200);
+    return true;
+}
+
+bool CMenuApp::page_servo3_1500()
+{
+    CdeServo3(1500);
+    return true;
+}
+
+bool CMenuApp::page_servo3_1700()
+{
+    CdeServo3(1700);
+    return true;
+}
+
+bool CMenuApp::page_servo3_2000()
+{
+    CdeServo3(2000);
+    return true;
+}
+
+
 
 // ===========================================================
 //                  CAPTEURS
@@ -285,6 +316,6 @@ bool CMenuApp::read_codeurs()
 
 bool CMenuApp::read_analog_inputs()
 {
-    _printf("Eana1=%d / Eana2=%d, Eana3=%d\n\r", readAnalog(ADC_CHANNEL_1), readAnalog(ADC_CHANNEL_17), readAnalog(ADC_CHANNEL_3));
+    _printf("Eana1=%d / Eana2=%d / Eana3=%d / Eana4=%d\n\r", readAnalog(ADC_CHANNEL_1), readAnalog(ADC_CHANNEL_17), readAnalog(ADC_CHANNEL_3), readAnalog(ADC_CHANNEL_10));
     return true;
 }

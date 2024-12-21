@@ -57,6 +57,10 @@ public:
     bool page_servo2_1700();
     bool page_servo2_2000();
 
+    bool page_servo3_1200();
+    bool page_servo3_1500();
+    bool page_servo3_1700();
+    bool page_servo3_2000();
 
     double m_param1;
     int m_param2;

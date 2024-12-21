@@ -16,6 +16,8 @@ void CdeMoteur1(float cde_pourcent);
 void CdeMoteur2(float cde_pourcent);
 void CdeServo1(int ppm1500);
 void CdeServo2(int ppm1500);
+void CdeServo3(int ppm1500);
+
 int getCodeur1();
 int getCodeur2();
 int readAnalog(int channel);

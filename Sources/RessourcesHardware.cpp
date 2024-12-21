@@ -122,3 +122,8 @@ void CdeServo2(int ppm1500)
 {
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, (float)(ppm1500/1e6) / ((float)T_PWM_SERVO/64000));
 }
+
+void CdeServo3(int ppm1500)
+{
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, (float)(ppm1500/1e6) / ((float)T_PWM_SERVO/64000));
+}
