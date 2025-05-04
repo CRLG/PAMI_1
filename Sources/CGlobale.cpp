@@ -44,7 +44,12 @@ void CGlobale::Run(void)
     // avant de commencer à  lui en envoyer des messages (et d'en recevoir)
     //wait_ms(3000);
 
-    //m_electrobot.Init();
+   m_lcd.Init();
+   m_lcd.GotoXY (20,0);
+   m_lcd.Puts ("CRLG", &Font_16x26, SSD1306::SSD1306_COLOR_WHITE);
+   m_lcd.GotoXY (30, 40);
+   m_lcd.Puts ("PAMI", &Font_11x18, SSD1306::SSD1306_COLOR_WHITE);
+   m_lcd.UpdateScreen();
 
     switch(ModeFonctionnement) {
     case MODE_AUTONOME : 			ModeAutonome();			break;

@@ -9,6 +9,8 @@ Includes/RessourcesHardware.h
 Sources/RessourcesHardware.cpp
 Includes/main_app.h
 Sources/main_app.cpp
+Sources/ssd1306.cpp
+Includes/ssd1306.h
 
 Includes/console_interactive_menu.h
 Sources/console_interactive_menu.cpp
@@ -78,5 +80,13 @@ ext/libElectrobotG431/Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal_uart_ex.h
 
 ext/CppRobLib/ConsoleInteractiveMenu/console_interaction.h
 ext/CppRobLib/ConsoleInteractiveMenu/console_interaction.cpp
+
+ext/CppRobLib/LCD_OLED_SSD1306/fonts.c
+ext/CppRobLib/LCD_OLED_SSD1306/fonts.h
+ext/CppRobLib/LCD_OLED_SSD1306/ssd1306_base.cpp
+ext/CppRobLib/LCD_OLED_SSD1306/ssd1306_base.h
+
+
+
 
 

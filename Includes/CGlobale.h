@@ -6,6 +6,7 @@
 
 #include "RessourcesHardware.h"
 #include "console_interactive_menu.h"
+#include "ssd1306.h"
 
 typedef enum {
     MODE_AUTONOME = 0,
@@ -44,6 +45,7 @@ public :
     void Run(void);
 
     CMenuApp m_menu_interactive;
+    SSD1306 m_lcd;
 
 private : 
     //! Gestion du mode autonome

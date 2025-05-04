@@ -7,4 +7,5 @@ ext/libElectrobotG431/Drivers/CMSIS/Device/ST/STM32G4xx/Include
 ext/libElectrobotG431/Drivers/CMSIS/Include
 
 ext/CppRobLib/ConsoleInteractiveMenu
+ext/CppRobLib/LCD_OLED_SSD1306
 

@@ -42,6 +42,7 @@ LIB_STM32 = ext/libElectrobotG431
 # CPP sources
 CXX_SOURCES =  \
 ext/CppRobLib/ConsoleInteractiveMenu/console_interaction.cpp \
+ext/CppRobLib/LCD_OLED_SSD1306/ssd1306_base.cpp \
 Sources/main_app.cpp \
 Sources/CGlobale.cpp \
 Sources/CGlobale_ModeAutonome.cpp \
@@ -49,6 +50,7 @@ Sources/CGlobale_ModePiloteLaBotBox.cpp \
 Sources/CGlobale_ModePiloteTerminal.cpp \
 Sources/RessourcesHardware.cpp \
 Sources/console_interactive_menu.cpp \
+Sources/ssd1306.cpp
 
 # C sources
 C_SOURCES =  \
@@ -81,6 +83,7 @@ $(LIB_STM32)/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_tim.c \
 $(LIB_STM32)/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_tim_ex.c \
 $(LIB_STM32)/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_uart.c \
 $(LIB_STM32)/Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_uart_ex.c \
+ext/CppRobLib/LCD_OLED_SSD1306/fonts.c
  
 
 # ASM sources
@@ -146,6 +149,7 @@ AS_INCLUDES =
 C_INCLUDES =  \
 -IIncludes \
 -Iext/CppRobLib/ConsoleInteractiveMenu \
+-Iext/CppRobLib/LCD_OLED_SSD1306 \
 -I$(LIB_STM32)/Includes \
 -I$(LIB_STM32)/Core/Inc \
 -I$(LIB_STM32)/Drivers/STM32G4xx_HAL_Driver/Inc \
