@@ -10,6 +10,9 @@ extern "C" {
 
 #include "main.h"
 
+#define I2C_HDL_ELECTROBOT hi2c2
+#define I2C_DEFAULT_TIMEOUT (100)
+
 void setLedBuiltin(bool state);
 void toggleLedBuiltin();
 void CdeMoteur1(float cde_pourcent);

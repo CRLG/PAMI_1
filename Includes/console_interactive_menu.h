@@ -62,6 +62,11 @@ public:
     bool page_servo3_1700();
     bool page_servo3_2000();
 
+    // _____________________________
+    // Page I2C
+    void page_i2c();
+    bool i2c_action_scan();
+
     double m_param1;
     int m_param2;
 };

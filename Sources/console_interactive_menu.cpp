@@ -26,6 +26,7 @@ void CMenuApp::page1()
     DECLARE_OPTION('a', "Commande moteurs", CMenuApp::page_cde_moteurs);
     DECLARE_OPTION('z', "Commande servo", CMenuApp::page_servos);
     DECLARE_OPTION('e', "Capteurs", CMenuApp::page_capteurs);
+    DECLARE_OPTION('i', "I2C", CMenuApp::page_i2c);
 }
 
 void CMenuApp::page_cde_moteurs()
@@ -302,8 +303,6 @@ bool CMenuApp::page_servo3_2000()
     return true;
 }
 
-
-
 // ===========================================================
 //                  CAPTEURS
 // ===========================================================
@@ -321,5 +320,46 @@ bool CMenuApp::read_analog_inputs()
             readAnalogVolt(2), readAnalog(2),
             readAnalogVolt(3), readAnalog(3),
             readAnalogVolt(4), readAnalog(4));
+    return true;
+}
+
+
+// =============================================================================
+//                          I2C
+// =============================================================================
+void CMenuApp::page_i2c()
+{
+    DECLARE_PAGE("I2C", CMenuApp::page_i2c);
+    DECLARE_ACTION('s', "Scan I2C", CMenuApp::i2c_action_scan);
+}
+
+bool CMenuApp::i2c_action_scan()
+{
+    uint8_t data;
+    _printf("SCAN I2C\n\r");
+
+    // 1. présentation du scan sous une forme linéaire des calculateurs présents
+    for (unsigned int addr=0; addr<0xFF; addr++)
+    {
+        if (HAL_I2C_Master_Transmit(&I2C_HDL_ELECTROBOT, addr, &data, 1, I2C_DEFAULT_TIMEOUT) == HAL_OK) {
+            printf(" Echo on 0x%x\n\r", addr);
+        }
+    }
+
+    // 1. présentation du scan sous une forme de tableau
+    _printf("\n\r      ");
+    for (unsigned int i=0; i<16; i++) _printf("%x   ", i);
+    for (unsigned int addr=0; addr<=0xFF; addr++)
+    {
+        if ((addr%16) == 0) printf("\n\r0x%02x", addr);
+        if (HAL_I2C_Master_Transmit(&I2C_HDL_ELECTROBOT, addr, &data, 1, I2C_DEFAULT_TIMEOUT) == HAL_OK) {
+            _printf("  OK", addr);
+        }
+        else {
+            _printf("  --", addr);
+        }
+    }
+    _printf("\n\r");
+
     return true;
 }
