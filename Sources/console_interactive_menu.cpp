@@ -316,6 +316,10 @@ bool CMenuApp::read_codeurs()
 
 bool CMenuApp::read_analog_inputs()
 {
-    _printf("Eana1=%d / Eana2=%d / Eana3=%d / Eana4=%d\n\r", readAnalog(ADC_CHANNEL_1), readAnalog(ADC_CHANNEL_17), readAnalog(ADC_CHANNEL_3), readAnalog(ADC_CHANNEL_10));
+    _printf("Eana1=%.3fV(%d) / Eana2=%.3fV(%d) / Eana3=%.3fV(%d) / Eana4=%.3fV(%d)\n\r",
+            readAnalogVolt(1), readAnalog(1),
+            readAnalogVolt(2), readAnalog(2),
+            readAnalogVolt(3), readAnalog(3),
+            readAnalogVolt(4), readAnalog(4));
     return true;
 }

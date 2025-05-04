@@ -17,10 +17,10 @@ void CdeMoteur2(float cde_pourcent);
 void CdeServo1(int ppm1500);
 void CdeServo2(int ppm1500);
 void CdeServo3(int ppm1500);
-
 int getCodeur1();
 int getCodeur2();
-int readAnalog(int channel);
+unsigned int readAnalog(int channel);
+float readAnalogVolt(int channel);
 
 #ifdef __cplusplus
 }

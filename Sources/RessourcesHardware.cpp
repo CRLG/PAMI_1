@@ -87,11 +87,21 @@ int getCodeur2()
 // ===================================================
 
 // --------------------------------------------------
-int readAnalog(int channel)
+unsigned int readAnalog(int num_eana)
 {
     ADC_ChannelConfTypeDef sConfig = {0};
+    int adc_channel;
+    switch(num_eana)
+    {
+    case 1: adc_channel = ADC_CHANNEL_1;    break;  // Eana1 : PA0
+    case 2: adc_channel = ADC_CHANNEL_17;   break;  // Eana2 : PA4
+    case 3: adc_channel = ADC_CHANNEL_3;    break;  // Eana3 : PA6
+    case 4: adc_channel = ADC_CHANNEL_10;   break;  // Eana4 : PF1
+    default :  // entrée Eana inexistante
+        return 0;
+    }
 
-    sConfig.Channel = channel;
+    sConfig.Channel = adc_channel;
     sConfig.Rank = ADC_REGULAR_RANK_1;
     sConfig.SamplingTime = ADC_SAMPLETIME_12CYCLES_5;
     sConfig.SingleDiff = ADC_SINGLE_ENDED;
@@ -107,6 +117,13 @@ int readAnalog(int channel)
     uint32_t analog_value = HAL_ADC_GetValue(&hadc2);
     HAL_ADC_Stop(&hadc2);
     return analog_value;
+}
+
+// --------------------------------------------------
+#define COEF_ADC_VOLTS (3.3f/4096)
+float readAnalogVolt(int channel)
+{
+    return readAnalog(channel) * COEF_ADC_VOLTS;
 }
 
 // ===================================================
