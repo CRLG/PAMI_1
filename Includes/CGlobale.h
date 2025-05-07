@@ -7,6 +7,7 @@
 #include "RessourcesHardware.h"
 #include "console_interactive_menu.h"
 #include "ssd1306.h"
+#include "CAsservissement.h"
 
 typedef enum {
     MODE_AUTONOME = 0,
@@ -46,8 +47,25 @@ public :
 
     CMenuApp m_menu_interactive;
     SSD1306 m_lcd;
+    CAsservissement m_asservissement;
+
 
 private : 
+
+    //variables pour la stratégie
+    int couleur_equipe;
+    bool fin_match;
+    int compteur_action;
+    bool action_toggle;
+    float duree_match;
+    int ETAPE;
+    float signe_equipe;
+
+    //! Initialisation de la stratégie
+    void initStrategie();
+    //! pas élémentaire d'execution de la stratégie
+    void Strategie();
+
     //! Gestion du mode autonome
     void ModeAutonome(void);
     //! Sequenceur de taches en mode autonome

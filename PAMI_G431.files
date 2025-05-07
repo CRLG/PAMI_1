@@ -5,6 +5,7 @@ Sources/CGlobale.cpp
 Sources/CGlobale_ModeAutonome.cpp
 Sources/CGlobale_ModePiloteLaBotBox.cpp
 Sources/CGlobale_ModePiloteTerminal.cpp
+Includes/ConfigSpecifiqueCoupe.h
 Includes/RessourcesHardware.h
 Sources/RessourcesHardware.cpp
 Includes/main_app.h
@@ -85,6 +86,9 @@ ext/CppRobLib/LCD_OLED_SSD1306/fonts.c
 ext/CppRobLib/LCD_OLED_SSD1306/fonts.h
 ext/CppRobLib/LCD_OLED_SSD1306/ssd1306_base.cpp
 ext/CppRobLib/LCD_OLED_SSD1306/ssd1306_base.h
+
+Includes/CAsservissement.h
+Sources/CAsservissement.cpp
 
 
 

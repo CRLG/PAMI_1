@@ -50,7 +50,8 @@ Sources/CGlobale_ModePiloteLaBotBox.cpp \
 Sources/CGlobale_ModePiloteTerminal.cpp \
 Sources/RessourcesHardware.cpp \
 Sources/console_interactive_menu.cpp \
-Sources/ssd1306.cpp
+Sources/ssd1306.cpp \
+Sources/CAsservissement.cpp
 
 # C sources
 C_SOURCES =  \
