@@ -125,6 +125,9 @@ void CAsservissement::Initialisation_PID(void)
     //Erreurs (I & D)
     prevErrorDist = 0.0, sumErrorDist = 0.0;
     prevErrorAngle = 0.0, sumErrorAngle = 0.0;			// TODO
+
+    ticksDroite_prec=getCodeur1();
+    ticksGauche_prec=getCodeur2();
 }
 
 
@@ -160,6 +163,15 @@ bool CAsservissement::isTargetReached(float errorDist, float errorAngle) {
 void CAsservissement::executerAsservissement()
 {
     // Calculer la position actuelle
+    long temp_d=0;
+    long temp_g=0;
+    temp_d=getCodeur1();
+    temp_g=getCodeur2();
+    ticksDroite=temp_d-ticksDroite_prec;
+    ticksGauche=temp_g-ticksGauche_prec;
+    ticksDroite_prec=temp_d;
+    ticksGauche_prec=temp_g;
+
       float deltaGauche = (ticksGauche * 2 * M_PI * rayonRouesCodeuses) / nbTicksParTourRouesCodeuses;
       float deltaDroite = (ticksDroite * 2 * M_PI * rayonRouesCodeuses) / nbTicksParTourRouesCodeuses;
       float dTheta = (deltaDroite - deltaGauche) / espacementRouesCodeuses;
@@ -205,7 +217,7 @@ void CAsservissement::executerAsservissement()
           rightSpeed=SAT(cde_max, cde_min, rightSpeed);
 
           CdeMoteur1(leftSpeed);
-          CdeMoteur1(rightSpeed);
+          CdeMoteur2(rightSpeed);
 
           // Vérification de la position cible
           coordonneesAtteintes = isTargetReached(errorDist, errorAngle);
