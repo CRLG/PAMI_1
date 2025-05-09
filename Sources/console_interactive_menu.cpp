@@ -4,6 +4,7 @@
 #include "console_interactive_menu.h"
 #include "RessourcesHardware.h"
 #include "stdio.h"
+#include "CGlobale.h"
 
 CMenuApp::CMenuApp()
 {
@@ -58,6 +59,7 @@ void CMenuApp::page_capteurs()
     DECLARE_OPTION('0', "Retour en page d'accueil", CMenuApp::page1);
     DECLARE_ACTION('a', "Etat des codeurs", CMenuApp::read_codeurs);
     DECLARE_ACTION('z', "Etat des entrees analogiques", CMenuApp::read_analog_inputs);
+    DECLARE_ACTION('t', "Distance télémètre", CMenuApp::read_telemetre);
 }
 
 void CMenuApp::page_servos()
@@ -320,6 +322,15 @@ bool CMenuApp::read_analog_inputs()
             readAnalogVolt(2), readAnalog(2),
             readAnalogVolt(3), readAnalog(3),
             readAnalogVolt(4), readAnalog(4));
+    return true;
+}
+
+
+bool CMenuApp::read_telemetre()
+{
+    unsigned long dist = Application.m_telemetre.getDistance();
+    if (dist != CTelemetre::DISTANCE_ERREUR) printf("D=%ld mm\n\r", dist);
+    else printf("Erreur de distance\n\r");
     return true;
 }
 

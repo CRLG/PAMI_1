@@ -46,6 +46,7 @@ public:
 
     bool read_codeurs();
     bool read_analog_inputs();
+    bool read_telemetre();
 
     bool page_servo1_1200();
     bool page_servo1_1500();
