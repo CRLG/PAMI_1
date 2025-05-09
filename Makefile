@@ -55,6 +55,7 @@ Sources/CAsservissement.cpp
 
 # C sources
 C_SOURCES =  \
+Sources/vl53l0x_api.c \
 $(LIB_STM32)/Core/Src/main.c \
 $(LIB_STM32)/Core/Src/retarget.c \
 $(LIB_STM32)/Core/Src/stm32g4xx_it.c \

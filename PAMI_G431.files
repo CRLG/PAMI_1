@@ -12,6 +12,8 @@ Includes/main_app.h
 Sources/main_app.cpp
 Sources/ssd1306.cpp
 Includes/ssd1306.h
+Sources/vl53l0x_api.c
+Includes/vl53l0x_api.h
 
 Includes/console_interactive_menu.h
 Sources/console_interactive_menu.cpp
