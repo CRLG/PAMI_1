@@ -51,6 +51,7 @@ Sources/CGlobale_ModePiloteTerminal.cpp \
 Sources/RessourcesHardware.cpp \
 Sources/console_interactive_menu.cpp \
 Sources/ssd1306.cpp \
+Sources/CTelemetre.cpp \
 Sources/CAsservissement.cpp
 
 # C sources

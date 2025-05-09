@@ -51,6 +51,8 @@ void CGlobale::Run(void)
    m_lcd.Puts ("PAMI", &Font_11x18, SSD1306::SSD1306_COLOR_WHITE);
    m_lcd.UpdateScreen();
 
+   m_telemetre.init();
+
     switch(ModeFonctionnement) {
     case MODE_AUTONOME : 			ModeAutonome();			break;
     case MODE_PILOTE_LABOTBOX : 	ModePiloteLaBotBox();	break;

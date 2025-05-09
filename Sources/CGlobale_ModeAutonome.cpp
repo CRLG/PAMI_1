@@ -66,6 +66,7 @@ void CGlobale::SequenceurModeAutonome(void)
         cpt20msec = 0;
 
         toggleLedBuiltin();
+        m_telemetre.periodicCall();
         printf("Hello %ld\n\r", HAL_GetTick());
 
         Strategie();

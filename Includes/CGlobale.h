@@ -8,6 +8,7 @@
 #include "console_interactive_menu.h"
 #include "ssd1306.h"
 #include "CAsservissement.h"
+#include "CTelemetre.h"
 
 typedef enum {
     MODE_AUTONOME = 0,
@@ -48,6 +49,7 @@ public :
     CMenuApp m_menu_interactive;
     SSD1306 m_lcd;
     CAsservissement m_asservissement;
+    CTelemetre m_telemetre;
 
 
 private : 

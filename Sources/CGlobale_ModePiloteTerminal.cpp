@@ -69,6 +69,7 @@ void CGlobale::SequenceurModePiloteTerminal(void)
     if (cpt20msec >= TEMPO_20msec) {
         cpt20msec = 0;
 
+        m_telemetre.periodicCall();
         //m_asservissement.CalculsMouvementsRobots();
     }
 
