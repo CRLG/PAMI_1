@@ -6,7 +6,8 @@
 
 
 //! Durée du match
-#define DUREE_MATCH 100 // [sec]
+#define FIN_MATCH 100 // [sec]
+#define DEBUT_MATCH 85 // [sec]
 
 typedef enum {
     JAUNE=0,

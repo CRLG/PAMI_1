@@ -4,7 +4,6 @@
 #include "CGlobale.h"
 #include <stdio.h>
 #include "ConfigSpecifiqueCoupe.h"
-//#include "ConfigSpecifiqueCoupe.h"
 
 
 
@@ -139,7 +138,7 @@ void CGlobale::Strategie()
             duree_match = duree_match + 0.02;
 
         //on est à 85 secondes on lance la stratégie du PAMI
-        if ((duree_match >= 85.) && (duree_match <= 100.))
+        if ((duree_match >= DEBUT_MATCH) && (duree_match <= FIN_MATCH))
         {
             //TODO: évaluer le distance de l'obstacle
             //distanceObstacles();
@@ -187,7 +186,7 @@ void CGlobale::Strategie()
             }   //fin execution corps de match
             */
         }     //fin test fin de match
-        else  //fin test 90 et 100 s
+        else  if (duree_match > FIN_MATCH)
         {
             
             //actions à ne faire qu'une fois en fin de match
@@ -209,19 +208,19 @@ void CGlobale::Strategie()
             }
             
             //actions à répéter en fin de match
-            if(duree_match > 100.)
+            if(duree_match > FIN_MATCH)
             {
-            compteur_action=compteur_action+20;
+                compteur_action=compteur_action+20;
                 if (compteur_action>=500)
-		{
-		    compteur_action=0;
-		    action_toggle=!action_toggle;
-		    if (action_toggle)
-		        CdeServo1(1000);
-		    else
-		        CdeServo1(1500);
-		}
-		}
+                {
+                    compteur_action=0;
+                    action_toggle=!action_toggle;
+                    if (action_toggle)
+                        CdeServo1(1000);
+                    else
+                        CdeServo1(1500);
+                }
+            }
         }
 
     }
