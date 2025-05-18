@@ -30,7 +30,7 @@
 */
 CAsservissement::CAsservissement()
 {
-  Init();
+  //Init();
 }
 
 
@@ -56,21 +56,23 @@ CAsservissement::~CAsservissement()
 void CAsservissement::Init(void)
 {
     //Initialisations des variables dimensionnantes pour l'asservissement
-    rayonRouesCodeuses = 0.04625/2.0; // Rayon des roues codeuses (en m)
-    espacementRouesCodeuses = 0.224; // Distance entre les roues codeuses(en m)
-    nbTicksParTourRouesCodeuses = 1200; // Résolution des codeurs
+    rayonRouesCodeuses = 2.4; // Rayon des roues codeuses (en cm)
+    espacementRouesCodeuses = 9.5; // Distance entre les roues codeuses(en m)
+    nbTicksParTourRouesCodeuses = 8192; // Résolution des codeurs
     dt = 0.02; // Pas de temps (en secondes)
 
     // initialisation des paramètres de l'asservissement
     // Constantes et variables pour le PID
-    Kp_dist = 7.0, Ki_dist = 0.0, Kd_dist = 0.0; // PID distance
-    Kp_angle = 1.0, Ki_angle = 0.0, Kd_angle = 0.0; // PID angle
+    Kp_dist = 10.0, Ki_dist = 0.0, Kd_dist = 0.0; // PID distance
+    Kp_angle = 250.0, Ki_angle = 0.0, Kd_angle = 0.0; // PID angle
     enableI_dist = false, enableD_dist = false; // Activation I/D pour distance
     enableI_angle = false, enableD_angle = false; // Activation I/D pour angle
 
     // Constantes matérielles
     maxMotorVoltage = 6.0; // Tension maximale des moteurs (en V)
-    shieldVoltage = 12.0;  // Tension d'alimentation du shield (en V)
+    shieldVoltage = 6.5;  // Tension d'alimentation du shield (en V)
+    zm_gauche=63.; //60
+    zm_droite=63.; //59
     cde_min=-80;
     cde_max=80;
 
@@ -86,17 +88,16 @@ void CAsservissement::Init(void)
     convergence = true;
     distance_consigne = 0.;
     angle_consigne = 0.;
+    cde_gauche=0.;
+    cde_droite=0.;
 
     //Erreurs
-    erreur_gauche = 0.0;  // erreur pour le codeur 1
-    erreur_droite = 0.0;  // erreur pour le codeur 2
     erreur_angle = 0.0;
+    erreur_distance = 0.0;
 
     //Erreurs (I & D)
     prevErrorDist = 0.0, sumErrorDist = 0.0;
     prevErrorAngle = 0.0, sumErrorAngle = 0.0;
-
-    targetAngle = 0;
 
     // Variables pour la position et la cible
     //currentX = 0, currentY = 0, currentTheta = 0; // Position actuelle
@@ -118,9 +119,11 @@ void CAsservissement::Initialisation_PID(void)
     newTarget=false;
 
     //Erreurs
-    erreur_gauche = 0.0;  // erreur pour le codeur 1
-    erreur_droite = 0.0;  // erreur pour le codeur 2
     erreur_angle = 0.0;
+    erreur_distance = 0.0;
+    cde_gauche=0.0;
+    cde_droite=0.0;
+    angle_consigne=0.0;
 
     //Erreurs (I & D)
     prevErrorDist = 0.0, sumErrorDist = 0.0;
@@ -130,7 +133,6 @@ void CAsservissement::Initialisation_PID(void)
     ticksGauche_prec=getCodeur2();
 }
 
-
 //*******************************************************************************************
 //								Arrêt de la commande brutale
 //*******************************************************************************************
@@ -139,6 +141,15 @@ void CAsservissement::Stop_robot(void)
 {
     CdeMoteur1(0);
     CdeMoteur2(0);
+}
+
+void CAsservissement::stopAsservissement()
+{
+    coordonneesAtteintes=true;
+    cde_droite=0.;
+    cde_gauche=0.;
+  Stop_robot();
+  newTarget = false;
 }
 
 
@@ -156,78 +167,146 @@ float CAsservissement::calculPID(float error, float *prevError, float *sumError,
 
 // Fonction pour vérifier si la cible est atteinte
 bool CAsservissement::isTargetReached(float errorDist, float errorAngle) {
-  return errorDist < 0.05 && abs(errorAngle) < 0.1; // Tolérances
+  return ((errorDist < 0.5) && (fabs(errorAngle) < 0.1)); // Tolérances
   //return abs(errorAngle)<0.1;
+    return (errorDist < 0.5);
 }
 
 void CAsservissement::executerAsservissement()
 {
     // Calculer la position actuelle
-    long temp_d=0;
-    long temp_g=0;
+    short temp_d=0;
+    short temp_g=0;
+
     temp_d=getCodeur1();
     temp_g=getCodeur2();
+
     ticksDroite=temp_d-ticksDroite_prec;
     ticksGauche=temp_g-ticksGauche_prec;
     ticksDroite_prec=temp_d;
     ticksGauche_prec=temp_g;
 
-      float deltaGauche = (ticksGauche * 2 * M_PI * rayonRouesCodeuses) / nbTicksParTourRouesCodeuses;
-      float deltaDroite = (ticksDroite * 2 * M_PI * rayonRouesCodeuses) / nbTicksParTourRouesCodeuses;
-      float dTheta = (deltaDroite - deltaGauche) / espacementRouesCodeuses;
-      float dX = (deltaGauche + deltaDroite) / 2.0 * cos(currentTheta + dTheta / 2.0);
-      float dY = (deltaGauche + deltaDroite) / 2.0 * sin(currentTheta + dTheta / 2.0);
+  float deltaGauche = (ticksGauche * 2 * M_PI * rayonRouesCodeuses) / nbTicksParTourRouesCodeuses;
+  float deltaDroite = (ticksDroite * 2 * M_PI * rayonRouesCodeuses) / nbTicksParTourRouesCodeuses;
+  float dTheta = (deltaDroite - deltaGauche) / espacementRouesCodeuses;
+  float dX = (deltaGauche + deltaDroite) / 2.0 * cos(currentTheta + dTheta / 2.0);
+  float dY = (deltaGauche + deltaDroite) / 2.0 * sin(currentTheta + dTheta / 2.0);
 
-      currentX += dX;
-      currentY += dY;
-      currentTheta += dTheta;
+  currentX += dX;
+  currentY += dY;
+  currentTheta += dTheta;
+  currentTheta = BornageAngle(currentTheta);
 
-      //reset des pas codeur
-      ticksGauche=0;
-      ticksDroite=0;
+  //reset des pas codeur
+  ticksGauche=0;
+  ticksDroite=0;
+  angle_consigne=0.;
+  erreur_distance=0.;
 
-      //on n'utilise l'asservissement que si on demande une nouvelle coordonnées
-      if(newTarget)
-      {
-          // Calcul des erreurs
-          float errorDist = sqrt(pow(targetX - currentX, 2) + pow(targetY - currentY, 2));
-          float targetAngle = atan2(targetY - currentY, targetX - currentX);
-          float errorAngle = targetAngle - currentTheta;
+    //on n'utilise l'asservissement que si on demande une nouvelle coordonnées
+    if(newTarget)
+    {
+        // Calcul de l'erreur distance
+        erreur_distance = sqrt(pow(targetX - currentX, 2) + pow(targetY - currentY, 2));
 
-          // Normaliser l'erreur angulaire entre -PI et PI
-          errorAngle = BornageAngle(errorAngle);
+        // Calcul de l'erreur distance
+        //calcul de Guigui pour les 4 cadrans
 
-          // PID pour l'angle
-          float controlAngle = calculPID(errorAngle, &prevErrorAngle, &sumErrorAngle, Kp_angle, Ki_angle, Kd_angle, enableI_angle, enableD_angle);
+        if ((targetX - currentX) >= 0)
+        {
+            if ((targetY - currentY) >= 0)
+            {
+                //cadran = 1;
+                angle_consigne = asin(fabs((targetY - currentY) / erreur_distance));
+            }
+            else
+            {
+                //cadran = 2;
+                angle_consigne = - asin(fabs((targetY - currentY) / erreur_distance));
+            }
+        }
+        else
+        {
+            if ((targetY - currentY) >= 0)
+            {
+                //cadran = 3;
+                angle_consigne = M_PI - asin(fabs((targetY - currentY) / erreur_distance));
+            }
+            else
+            {
+                //cadran = 4;
+                angle_consigne = asin(fabs((targetY - currentY) / erreur_distance)) - M_PI;
+            }
+        }
+
+        //angle_consigne=atan2(targetY - currentY,targetX - currentX);
+
+        erreur_angle = angle_consigne - currentTheta;
+
+        // Normaliser l'erreur angulaire entre -PI et PI
+        erreur_angle = BornageAngle(erreur_angle);
+
+        // Si le robot est proche du point de convergence et dans l'axe on impose une erreur d'angle nulle,
+        //on désactive la stratégie si l'erreur en distance devient trop importante
+        /*bool verouillage_approche=false;
+        if ((fabs(erreur_distance) < 2) && (fabs(erreur_angle) < 0.1))
+        {
+            verouillage_approche = true; // Set verrouillage
+        }
+
+        if (fabs(erreur_distance) > 3)
+        {
+            verouillage_approche = false; // Reset le verrouillage
+        }
+
+        if (verouillage_approche)
+        {
+            erreur_angle = 0; // Si verrouillage, le robot est à peu près dans l'axe, reste à avancer un peu !
+        }*/
+
+      // PID pour l'angle
+      float controlAngle = 0.;
 
 
-          // Si l'angle est corrigé, corrigez la distance
-          float controlDist = 0;
-          if (abs(errorAngle) < 0.1) { // Tolérance sur l'angle (radians)
-            controlDist = calculPID(errorDist, &prevErrorDist, &sumErrorDist, Kp_dist, Ki_dist, Kd_dist, enableI_dist, enableD_dist);
-          }
-
-          int sens_pos=(errorAngle>0)?1:-1;
-
-          // Commande des moteurs
-          float leftSpeed = controlDist - sens_pos*controlAngle; // Différence pour tourner
-          float rightSpeed = controlDist + sens_pos*controlAngle;
-
-          leftSpeed=SAT(cde_max, cde_min, leftSpeed);
-          rightSpeed=SAT(cde_max, cde_min, rightSpeed);
-
-          CdeMoteur1(leftSpeed);
-          CdeMoteur2(rightSpeed);
-
-          // Vérification de la position cible
-          coordonneesAtteintes = isTargetReached(errorDist, errorAngle);
-
-          // Arrêter les moteurs si la cible est atteinte
-          if (coordonneesAtteintes) {
-            Stop_robot();
-            newTarget = false;
-          }
+      // Si l'angle est corrigé, on corrige la distance
+      float controlDist = 0;
+      if (fabs(erreur_angle) > 0.05) { // Tolérance sur l'angle (radians)
+          controlAngle=calculPID(erreur_angle, &prevErrorAngle, &sumErrorAngle, Kp_angle, Ki_angle, Kd_angle, enableI_angle, enableD_angle);
       }
+      else{
+        controlDist = calculPID(erreur_distance, &prevErrorDist, &sumErrorDist, Kp_dist, Ki_dist, Kd_dist, enableI_dist, enableD_dist);
+      }
+
+      int sens_pos=(erreur_angle>0)?1:-1;
+
+      // Commande des moteurs
+      float leftSpeed = controlDist - sens_pos*controlAngle; // Différence pour tourner
+      float rightSpeed = controlDist + sens_pos*controlAngle;
+
+      cde_gauche=SAT(cde_max, cde_min, leftSpeed);
+      cde_droite=SAT(cde_max, cde_min, rightSpeed);
+
+      //correction des zones mortes
+      if ((cde_droite >0.) && (cde_droite<zm_droite))
+        cde_droite=zm_droite;
+      if ((cde_droite <0.) && (cde_droite>((-1)*zm_droite)))
+        cde_droite=((-1)*zm_droite);
+      if ((cde_gauche >0.) && (cde_gauche<zm_gauche))
+        cde_gauche=zm_gauche;
+      if ((cde_gauche <0.) && (cde_gauche>((-1)*zm_gauche)))
+        cde_gauche=((-1)*zm_gauche);
+
+
+      CdeMoteur1(cde_droite);
+      CdeMoteur2(cde_gauche);
+
+      // Vérification de la position cible
+      coordonneesAtteintes = ((erreur_distance<1)?true:false);
+
+      // Arrêter les moteurs si la cible est atteinte
+      if (coordonneesAtteintes)
+          stopAsservissement();
+  }
 }
 
 
@@ -263,7 +342,7 @@ float CAsservissement::SAT(float Inp_max, float Inp_min, float Inp)
 
 
 float  CAsservissement::BornageAngle(float angle){
-    float ret=0;
+    float ret=0.;
 
     if (angle > M_PI){
         ret = angle - (2.0*M_PI);

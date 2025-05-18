@@ -20,8 +20,6 @@ void CGlobale::ModePiloteTerminal(void)
     }
 }
 
-
-
 // _____________________________________________________________
 void CGlobale::ReceiveRS232_ModePiloteTerminal(void)
 {
@@ -71,6 +69,7 @@ void CGlobale::SequenceurModePiloteTerminal(void)
 
         m_telemetre.periodicCall();
         //m_asservissement.CalculsMouvementsRobots();
+        m_asservissement.executerAsservissement();
     }
 
 

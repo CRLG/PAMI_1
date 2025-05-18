@@ -51,15 +51,15 @@ void CdeMoteur2(float cde_pourcent)
        HAL_GPIO_WritePin(Mot2_Sens2_GPIO_Port, Mot2_Sens2_Pin, GPIO_PIN_RESET);
        __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, 0);
    }
-   else if (cde_pourcent > 0) {
+   else if (cde_pourcent < 0) {
        HAL_GPIO_WritePin(Mot2_Sens1_GPIO_Port, Mot2_Sens1_Pin, GPIO_PIN_SET);
        HAL_GPIO_WritePin(Mot2_Sens2_GPIO_Port, Mot2_Sens2_Pin, GPIO_PIN_RESET);
-       __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, htim4.Init.Period/100. * cde_pourcent);
+       __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, htim4.Init.Period/100. * -(cde_pourcent));
    }
    else {
        HAL_GPIO_WritePin(Mot2_Sens1_GPIO_Port, Mot2_Sens1_Pin, GPIO_PIN_RESET);
        HAL_GPIO_WritePin(Mot2_Sens2_GPIO_Port, Mot2_Sens2_Pin, GPIO_PIN_SET);
-       __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, htim4.Init.Period/100. * (-cde_pourcent));
+       __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_2, htim4.Init.Period/100. * (cde_pourcent));
    }
 }
 
@@ -70,13 +70,13 @@ void CdeMoteur2(float cde_pourcent)
 // ===================================================
 
 // --------------------------------------------------
-int getCodeur1()
+short getCodeur1()
 {
     return __HAL_TIM_GET_COUNTER(&htim2);
 }
 
 // --------------------------------------------------
-int getCodeur2()
+short getCodeur2()
 {
     return __HAL_TIM_GET_COUNTER(&htim3);
 }

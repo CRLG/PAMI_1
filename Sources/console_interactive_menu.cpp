@@ -5,11 +5,12 @@
 #include "RessourcesHardware.h"
 #include "stdio.h"
 #include "CGlobale.h"
+#include "CAsservissement.h"
 
 CMenuApp::CMenuApp()
 {
     enable_echo(false);
-    DECLARE_START_PAGE(CMenuApp::page1)
+    DECLARE_START_PAGE(CMenuApp::page1);
 }
 
 // ______________________________________________
@@ -27,7 +28,8 @@ void CMenuApp::page1()
     DECLARE_OPTION('a', "Commande moteurs", CMenuApp::page_cde_moteurs);
     DECLARE_OPTION('z', "Commande servo", CMenuApp::page_servos);
     DECLARE_OPTION('e', "Capteurs", CMenuApp::page_capteurs);
-    DECLARE_OPTION('i', "I2C", CMenuApp::page_i2c);
+    DECLARE_OPTION('r', "I2C", CMenuApp::page_i2c);
+    DECLARE_OPTION('t', "Asservissement", CMenuApp::page_asservissement);
 }
 
 void CMenuApp::page_cde_moteurs()
@@ -49,8 +51,6 @@ void CMenuApp::page_cde_moteurs()
     DECLARE_ACTION('k', "Moteur D : -10%", CMenuApp::action_moteurD_M10pct);
     DECLARE_ACTION('l', "Moteur D : -50%", CMenuApp::action_moteurD_M50pct);
     DECLARE_ACTION('m', "Moteur D : -100%", CMenuApp::action_moteurD_M100pct);
-
-
 }
 
 void CMenuApp::page_capteurs()
@@ -71,7 +71,6 @@ void CMenuApp::page_servos()
     DECLARE_ACTION('e', "Servo1 : 1700", CMenuApp::page_servo1_1700);
     DECLARE_ACTION('r', "Servo1 : 2000", CMenuApp::page_servo1_2000);
 
-
     DECLARE_ACTION('q', "Servo2 : 1500", CMenuApp::page_servo2_1500);
     DECLARE_ACTION('s', "Servo2 : 1200", CMenuApp::page_servo2_1200);
     DECLARE_ACTION('d', "Servo2 : 1700", CMenuApp::page_servo2_1700);
@@ -84,7 +83,21 @@ void CMenuApp::page_servos()
 
 }
 
+void CMenuApp::page_asservissement () {
+    DECLARE_PAGE("ASSERVISSEMENT", CMenuApp::page_asservissement);
+    DECLARE_OPTION('0', "Retour en page d'accueil", CMenuApp::page1);
+    DECLARE_ACTION('x', "STOP", CMenuApp::asser_stop);
+    DECLARE_ACTION('c', "RESET ASSERVISSEMENT", CMenuApp::asser_resetPos);
+    DECLARE_ACTION('a', "+10 cm", CMenuApp::asser_avant10);
+    DECLARE_ACTION('z', "+50 cm", CMenuApp::asser_avant50);
+    DECLARE_ACTION('e', "+100 cm", CMenuApp::asser_avant100);
 
+    DECLARE_ACTION('r', "-10 cm", CMenuApp::asser_arriere10);
+    DECLARE_ACTION('t', "-50 cm", CMenuApp::asser_arriere50);
+    DECLARE_ACTION('y', "-100 cm", CMenuApp::asser_arriere100);
+
+    DECLARE_ACTION('u', "Afficher x/y", CMenuApp::get_xy_asser);
+}
 
 void CMenuApp::page_set_param_1()
 {
@@ -158,7 +171,7 @@ bool CMenuApp::action_moteurG_10pct()
 
 bool CMenuApp::action_moteurG_50pct()
 {
-    CdeMoteur1(50);
+    CdeMoteur1(60);
     return true;
 }
 
@@ -201,7 +214,7 @@ bool CMenuApp::action_moteurD_10pct()
 
 bool CMenuApp::action_moteurD_50pct()
 {
-    CdeMoteur2(50);
+    CdeMoteur2(59);
     return true;
 }
 
@@ -334,6 +347,141 @@ bool CMenuApp::read_telemetre()
     return true;
 }
 
+// ===========================================================
+//                  ASSERVISSEMENT
+// ===========================================================
+bool CMenuApp::asser_stop () {
+    Application.m_asservissement.stopAsservissement();
+    return true;
+}
+
+bool CMenuApp::asser_resetPos()
+{
+    Application.m_asservissement.stopAsservissement();
+    Application.m_asservissement.Initialisation_PID();
+    Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
+    return true;
+
+}
+
+bool CMenuApp::asser_avant10 () {
+    //Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
+    Application.m_asservissement.CommandeMouvementXY(10.,0.);
+    //Application.m_asservissement.newTarget = true;
+
+//    // Asservissement actif tant que la target n'est pas atteinte
+//    while (!CMenuApp::m_asservissement.coordonneesAtteintes) {
+//        static unsigned int cpt20msec = 0;
+//        cpt20msec++;
+//        if (cpt20msec >= TEMPO_20msec) {
+//            cpt20msec = 0;
+
+//            toggleLedBuiltin();
+//            m_asservissement.executerAsservissement();
+//        }
+//    }
+    return true;
+}
+
+bool CMenuApp::asser_avant50 () {
+    //Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
+    Application.m_asservissement.CommandeMouvementXY(50.,0.);
+
+//    // Asservissement actif tant que la target n'est pas atteinte
+//    while (!CMenuApp::m_asservissement.coordonneesAtteintes) {
+//        static unsigned int cpt20msec = 0;
+//        cpt20msec++;
+//        if (cpt20msec >= TEMPO_20msec) {
+//            cpt20msec = 0;
+
+//            toggleLedBuiltin();
+//            m_asservissement.executerAsservissement();
+//        }
+//    }
+    return true;
+}
+
+bool CMenuApp::asser_avant100 () {
+    //Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
+    Application.m_asservissement.CommandeMouvementXY(100.0,0.0);
+
+//    static unsigned int cpt20msec = 0;
+//    // Asservissement actif tant que la target n'est pas atteinte
+//    while (!CMenuApp::m_asservissement.coordonneesAtteintes) {
+//        cpt20msec++;
+//        if (cpt20msec >= TEMPO_20msec) {
+//            cpt20msec = 0;
+
+//            toggleLedBuiltin();
+//            m_asservissement.executerAsservissement();
+//        }
+//    }
+    return true;
+}
+
+bool CMenuApp::asser_arriere10 () {
+    Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
+    Application.m_asservissement.CommandeMouvementXY(-10.,0.);
+    Application.m_asservissement.newTarget = true;
+
+//    // Asservissement actif tant que la target n'est pas atteinte
+//    while (!CMenuApp::m_asservissement.coordonneesAtteintes) {
+//        static unsigned int cpt20msec = 0;
+//        cpt20msec++;
+//        if (cpt20msec >= TEMPO_20msec) {
+//            cpt20msec = 0;
+
+//            toggleLedBuiltin();
+//            m_asservissement.executerAsservissement();
+//        }
+//    }
+    return true;
+}
+
+bool CMenuApp::asser_arriere50 () {
+    Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
+    Application.m_asservissement.CommandeMouvementXY(-50.,0.);
+
+//    // Asservissement actif tant que la target n'est pas atteinte
+//    while (!CMenuApp::m_asservissement.coordonneesAtteintes) {
+//        static unsigned int cpt20msec = 0;
+//        cpt20msec++;
+//        if (cpt20msec >= TEMPO_20msec) {
+//            cpt20msec = 0;
+
+//            toggleLedBuiltin();
+//            m_asservissement.executerAsservissement();
+//        }
+//    }
+    return true;
+}
+
+bool CMenuApp::asser_arriere100 () {
+    Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
+    Application.m_asservissement.CommandeMouvementXY(-100.0,0.0);
+
+//    static unsigned int cpt20msec = 0;
+//    // Asservissement actif tant que la target n'est pas atteinte
+//    while (!CMenuApp::m_asservissement.coordonneesAtteintes) {
+//        cpt20msec++;
+//        if (cpt20msec >= TEMPO_20msec) {
+//            cpt20msec = 0;
+
+//            toggleLedBuiltin();
+//            m_asservissement.executerAsservissement();
+//        }
+//    }
+    return true;
+}
+
+bool CMenuApp::get_xy_asser () {
+    //m_asservissement.currentX = 10.1;
+    _printf("x = %f, y = %f, theta=%f\n\r", Application.m_asservissement.currentX, Application.m_asservissement.currentY, Application.m_asservissement.currentTheta);
+    _printf("erreur dist = %f\t\terreur angle = %f\n\r", Application.m_asservissement.erreur_distance, Application.m_asservissement.erreur_angle);
+    _printf("cde gauche = %f\t\tcde droite = %f\n\r", Application.m_asservissement.cde_gauche, Application.m_asservissement.cde_droite);
+    _printf("convergence = %d, demande mouvement = %d\n\r", Application.m_asservissement.coordonneesAtteintes, Application.m_asservissement.newTarget);
+    return true;
+}
 
 // =============================================================================
 //                          I2C

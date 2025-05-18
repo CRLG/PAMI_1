@@ -17,13 +17,9 @@
 void CGlobale::ModeAutonome(void)
 {
     initStrategie();
-    m_asservissement.Init();
 
     while(1) {
-        if (tick) {
-            tick = 0;
-            SequenceurModeAutonome();
-        }
+        SequenceurModeAutonome();
     }
 }
 
@@ -65,8 +61,9 @@ void CGlobale::SequenceurModeAutonome(void)
         cpt20msec = 0;
 
         toggleLedBuiltin();
-        m_telemetre.periodicCall();
+        //m_telemetre.periodicCall();
         Strategie();
+        //TestAssert();
     }
 
 
@@ -120,142 +117,159 @@ void CGlobale::initStrategie()
     else
         m_lcd.Puts ("BLEU", &Font_11x18, SSD1306::SSD1306_COLOR_WHITE);
     m_lcd.UpdateScreen();
-    
-    
 }
 
 void CGlobale::Strategie()
 {
     if (readAnalogVolt(1) < 1.)
-    {
-        if (duree_match < 0)
         {
-            duree_match = 0; //je commence le match (init du temps t0)
-            m_asservissement.setPosition_XYTeta(0.,0.,0.);
-            m_asservissement.Init();
-        }
-        else
-            duree_match = duree_match + 0.02;
-
-        //on est à 85 secondes on lance la stratégie du PAMI
-        if ((duree_match >= DEBUT_MATCH) && (duree_match <= FIN_MATCH))
-        {
-            //TODO: évaluer le distance de l'obstacle
-            //distanceObstacles();
-
-            //TODO: débloquer l'évitement
-            //on teste les obstacles si on n'est pas hors range sur au moins un des 2
-            /*
-            if ((mesure_1.RangeMilliMeter <= SEUIL_OBSTACLE) || (mesure_2.RangeMilliMeter <= SEUIL_OBSTACLE))
+            if (duree_match < 0)
             {
-                m_asservissement.RobotStop();
+                duree_match = 0; //je commence le match (init du temps t0)
+                m_asservissement.setPosition_XYTeta(0.,0.,0.);
+                //m_asservissement.Init();
             }
             else
+                duree_match = duree_match + 0.02;
+
+            //on est à 85 secondes on lance la stratégie du PAMI
+            if ((duree_match >= DEBUT_MATCH) && (duree_match <= FIN_MATCH))
             {
-            */                
-                switch (ETAPE)
+                //TODO: évaluer le distance de l'obstacle
+                //distanceObstacles();
+
+                //TODO: débloquer l'évitement
+                //on teste les obstacles si on n'est pas hors range sur au moins un des 2
+                /*
+                if ((mesure_1.RangeMilliMeter <= SEUIL_OBSTACLE) || (mesure_2.RangeMilliMeter <= SEUIL_OBSTACLE))
                 {
-                    case 0:
-                        if(!m_asservissement.newTarget)
-                        {
-                            //avancer de xx cm (jusqu'en haut de la pente)
-                            m_asservissement.CommandeMouvementXY(150.,0.);
-                        }
-                        if(m_asservissement.coordonneesAtteintes)
-                            ETAPE++;
-                        break;  //fin de la première étape
-
-                    case 1:
-                        if(!m_asservissement.newTarget)
-                        {
-                            //tourner et avancer jusqu'au bord de la scène
-                            m_asservissement.CommandeMouvementXY(150.,signe_equipe*(-30.));
-                        }
-                        if(m_asservissement.coordonneesAtteintes)
-                            ETAPE++;
-                        break;  //fin de la deuxième étape
-
-                    default:
-                        break;  //étape par défaut : on ne fait rien
-
-                }  //fin de la machine à états
-
-                //en dehors de la détection d'obstacle on execute toujours l'asservissement
-                m_asservissement.executerAsservissement();
-            /*
-            }   //fin execution corps de match
-            */
-        }     //fin test fin de match
-        else  if (duree_match > FIN_MATCH)
-        {
-            
-            //actions à ne faire qu'une fois en fin de match
-            if(fin_match==false)
-            {
-            	fin_match=true;
-            	m_asservissement.Stop_robot();
-            	
-            	//Effacement de l'écran
-                m_lcd.Fill(SSD1306::SSD1306_COLOR_BLACK );
-                m_lcd.UpdateScreen();
-
-                //Affichage du nombre de points
-                m_lcd.GotoXY (20,0);
-                m_lcd.Puts ("CRLG", &Font_16x26, SSD1306::SSD1306_COLOR_WHITE);
-                m_lcd.GotoXY (30, 40);
-                m_lcd.Puts ("40 PTS", &Font_11x18, SSD1306::SSD1306_COLOR_WHITE);
-                m_lcd.UpdateScreen();
-            }
-            
-            //actions à répéter en fin de match
-            if(duree_match > FIN_MATCH)
-            {
-                compteur_action=compteur_action+20;
-                if (compteur_action>=500)
+                    m_asservissement.RobotStop();
+                }
+                else
                 {
-                    compteur_action=0;
-                    action_toggle=!action_toggle;
-                    if (action_toggle)
-                        CdeServo1(1000);
-                    else
-                        CdeServo1(1500);
+                */
+                    switch (ETAPE)
+                    {
+                        case 0:
+                            if(!m_asservissement.newTarget)
+                            {
+                                //avancer de xx cm (jusqu'en haut de la pente)
+                                m_asservissement.CommandeMouvementXY(150.,0.);
+                            }
+                            if(m_asservissement.coordonneesAtteintes)
+                                ETAPE = 0;
+                            break;  //fin de la première étape
+
+                        case 1:
+                            if(!m_asservissement.newTarget)
+                            {
+                                //tourner et avancer jusqu'au bord de la scène
+                                m_asservissement.CommandeMouvementXY(150.,signe_equipe*(-30.));
+                            }
+                            if(m_asservissement.coordonneesAtteintes)
+                                ETAPE++;
+                            break;  //fin de la deuxième étape
+
+                        default:
+                            break;  //étape par défaut : on ne fait rien
+
+                    }  //fin de la machine à états
+
+                    //en dehors de la détection d'obstacle on execute toujours l'asservissement
+                    m_asservissement.executerAsservissement();
+                /*
+                }   //fin execution corps de match
+                */
+            }     //fin test fin de match
+            else if (duree_match > FIN_MATCH)
+            {
+                //actions à ne faire qu'une fois en fin de match
+                if(fin_match==false)
+                {
+                    fin_match=true;
+                    m_asservissement.Stop_robot();
+
+                    //Effacement de l'écran
+                    m_lcd.Fill(SSD1306::SSD1306_COLOR_BLACK );
+                    m_lcd.UpdateScreen();
+
+                    //Affichage du nombre de points
+                    m_lcd.GotoXY (20,0);
+                    m_lcd.Puts ("CRLG", &Font_16x26, SSD1306::SSD1306_COLOR_WHITE);
+                    m_lcd.GotoXY (30, 40);
+                    m_lcd.Puts ("40 PTS", &Font_11x18, SSD1306::SSD1306_COLOR_WHITE);
+                    m_lcd.UpdateScreen();
+                }
+
+                //actions à répéter en fin de match
+                if(duree_match > FIN_MATCH)
+                {
+                    compteur_action=compteur_action+20;
+                    if (compteur_action>=500)
+                    {
+                        compteur_action=0;
+                        action_toggle=!action_toggle;
+                        if (action_toggle)
+                            CdeServo1(1000);
+                        else
+                            CdeServo1(1500);
+                    }
                 }
             }
         }
 
-    }
-    
-    //Tant que la tirette n'est pas tirée, on peut changer de couleur
-    else
-    {
-        //test du bouton de changement de couleur
-        if(readAnalogVolt(2) < 1.)
+        //Tant que la tirette n'est pas tirée, on peut changer de couleur
+        else
         {
-            //changement de couleur
-            if(couleur_equipe==BLEU)
+            //test du bouton de changement de couleur
+            if(readAnalogVolt(2) < 1.)
             {
-                couleur_equipe = JAUNE;
-                signe_equipe=1;
-            }
-            else
-            {
-                couleur_equipe = BLEU;
-                signe_equipe=-1;
-            }
+                //changement de couleur
+                if(couleur_equipe==BLEU)
+                {
+                    couleur_equipe = JAUNE;
+                    signe_equipe=1;
+                }
+                else
+                {
+                    couleur_equipe = BLEU;
+                    signe_equipe=-1;
+                }
 
-            //Effacement de l'écran
-            m_lcd.Fill(SSD1306::SSD1306_COLOR_BLACK );
-            m_lcd.UpdateScreen();
+                //Effacement de l'écran
+                m_lcd.Fill(SSD1306::SSD1306_COLOR_BLACK );
+                m_lcd.UpdateScreen();
 
-            //Affichage de la couleur de l'équipe
-            m_lcd.GotoXY (20,0);
-            m_lcd.Puts ("CRLG", &Font_16x26, SSD1306::SSD1306_COLOR_WHITE);
-            m_lcd.GotoXY (30, 40);
-            if(couleur_equipe==JAUNE)
-                m_lcd.Puts ("JAUNE", &Font_11x18, SSD1306::SSD1306_COLOR_WHITE);
-            else
-                m_lcd.Puts ("BLEU", &Font_11x18, SSD1306::SSD1306_COLOR_WHITE);
-            m_lcd.UpdateScreen();
+                //Affichage de la couleur de l'équipe
+                m_lcd.GotoXY (20,0);
+                m_lcd.Puts ("CRLG", &Font_16x26, SSD1306::SSD1306_COLOR_WHITE);
+                m_lcd.GotoXY (30, 40);
+                if(couleur_equipe==JAUNE)
+                    m_lcd.Puts ("JAUNE", &Font_11x18, SSD1306::SSD1306_COLOR_WHITE);
+                else
+                    m_lcd.Puts ("BLEU", &Font_11x18, SSD1306::SSD1306_COLOR_WHITE);
+                m_lcd.UpdateScreen();
+            }
         }
+}
+
+void CGlobale::TestAssert () {
+    if (duree_match < 0)
+    {
+        duree_match = 0; //je commence le match (init du temps t0)
+        m_asservissement.setPosition_XYTeta(0.,0.,0.);
+    }
+    else
+        duree_match = duree_match + 0.02;
+
+    if ((duree_match >= DEBUT_MATCH) && (duree_match <= FIN_MATCH))
+    {
+        if(!m_asservissement.newTarget)
+        {
+            //avancer de xx cm (jusqu'en haut de la pente)
+            m_asservissement.CommandeMouvementXY(150.,0.);
+            m_asservissement.newTarget = true;
+        }
+        m_asservissement.executerAsservissement();
     }
 }

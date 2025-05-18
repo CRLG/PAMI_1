@@ -5,11 +5,13 @@
 #define _CONSOLE_INTERACTIVE_MENU_H_
 
 #include "console_interaction.h"
+#include "CAsservissement.h"
 
 class CMenuApp : public ConsoleInteraction
 {
 public:
     CMenuApp();
+    //CAsservissement m_asservissement = CAsservissement();
 
     void send_to_console(char msg[]);  // méthode virtuelle pure ré-implémentée
 
@@ -17,6 +19,8 @@ public:
     void page_cde_moteurs();
     void page_capteurs();
     void page_servos();
+    void page_asservissement();
+
     void page_set_param_1();
     void page_set_param_2();
 
@@ -63,6 +67,19 @@ public:
     bool page_servo3_1700();
     bool page_servo3_2000();
 
+    bool asser_stop();
+    bool asser_resetPos();
+
+    bool asser_avant10();
+    bool asser_avant50();
+    bool asser_avant100();
+
+    bool asser_arriere10();
+    bool asser_arriere50();
+    bool asser_arriere100();
+
+    bool get_xy_asser();
+
     // _____________________________
     // Page I2C
     void page_i2c();
@@ -70,6 +87,7 @@ public:
 
     double m_param1;
     int m_param2;
+
 };
 #endif 
 

@@ -43,7 +43,6 @@ void CGlobale::Run(void)
     // Temps nécessaire en pratique pour que l'écran tactile ai fini de démarrer
     // avant de commencer à  lui en envoyer des messages (et d'en recevoir)
     //wait_ms(3000);
-
    m_lcd.Init();
    m_lcd.GotoXY (20,0);
    m_lcd.Puts ("CRLG", &Font_16x26, SSD1306::SSD1306_COLOR_WHITE);
@@ -52,6 +51,7 @@ void CGlobale::Run(void)
    m_lcd.UpdateScreen();
 
    m_telemetre.init();
+   m_asservissement.Init();
 
     switch(ModeFonctionnement) {
     case MODE_AUTONOME : 			ModeAutonome();			break;

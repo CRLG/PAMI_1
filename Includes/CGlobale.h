@@ -67,6 +67,7 @@ private :
     void initStrategie();
     //! pas élémentaire d'execution de la stratégie
     void Strategie();
+    void TestAssert();
 
     //! Gestion du mode autonome
     void ModeAutonome(void);
