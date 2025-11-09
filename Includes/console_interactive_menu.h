@@ -85,6 +85,14 @@ public:
     void page_i2c();
     bool i2c_action_scan();
 
+    // _____________________________
+    // Page OTOS
+    void page_otos();
+    bool otos_read_version();
+    bool otos_read_position();
+
+
+
     double m_param1;
     int m_param2;
 

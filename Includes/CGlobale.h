@@ -9,6 +9,7 @@
 #include "ssd1306.h"
 #include "CAsservissement.h"
 #include "CTelemetre.h"
+#include "OTOS_XYTeta.h"
 
 typedef enum {
     MODE_AUTONOME = 0,
@@ -50,7 +51,7 @@ public :
     SSD1306 m_lcd;
     CAsservissement m_asservissement;
     CTelemetre m_telemetre;
-
+    OtosXYTeta m_otos_xyteta;
 
 private : 
 

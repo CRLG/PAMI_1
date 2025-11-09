@@ -6,6 +6,7 @@
 #include "stdio.h"
 #include "CGlobale.h"
 #include "CAsservissement.h"
+#include "OTOS_XYTeta.h"
 
 CMenuApp::CMenuApp()
 {
@@ -29,6 +30,7 @@ void CMenuApp::page1()
     DECLARE_OPTION('z', "Commande servo", CMenuApp::page_servos);
     DECLARE_OPTION('e', "Capteurs", CMenuApp::page_capteurs);
     DECLARE_OPTION('r', "I2C", CMenuApp::page_i2c);
+    DECLARE_OPTION('o', "Odometry OTOS", CMenuApp::page_otos);
     DECLARE_OPTION('t', "Asservissement", CMenuApp::page_asservissement);
 }
 
@@ -521,4 +523,35 @@ bool CMenuApp::i2c_action_scan()
     _printf("\n\r");
 
     return true;
+}
+
+
+// _____________________________
+// Page OTOS
+void CMenuApp::page_otos()
+{
+    DECLARE_PAGE("Odometry OTOS", CMenuApp::page_otos);
+    DECLARE_ACTION('v', "Read Version", CMenuApp::otos_read_version);
+    DECLARE_ACTION('p', "Read Position", CMenuApp::otos_read_position);
+
+}
+
+bool CMenuApp::otos_read_version()
+{
+    otos_error_t err;
+    otos_version_t hwVersion, fwVersion;
+
+	err = Application.m_otos_xyteta.getVersionInfo(hwVersion, fwVersion);
+	_printf("HW=%d.%d / SW=%d.%d\n\r", hwVersion.major, hwVersion.minor, fwVersion.major, fwVersion.minor);
+	return true;
+}
+
+bool CMenuApp::otos_read_position()
+{
+    otos_error_t err;
+	otos_pose2d_t pos;
+	err = Application.m_otos_xyteta.getPosition(pos);
+	_printf("Position x, y, teta= {%f, %f, %f} \n\r", pos.x, pos.y, pos.h);
+
+	return true;
 }

@@ -1,7 +1,9 @@
 /*! \file CGlobale_ModePiloteTerminal.cpp
     \brief Classe qui contient toute l'application pour le mode de fonctionnement pilote via Anaconbot
 */
+#include <stdio.h>
 #include "CGlobale.h"
+#include "OTOS_XYTeta.h"
 
 //___________________________________________________________________________
 /*!
@@ -83,6 +85,11 @@ void CGlobale::SequenceurModePiloteTerminal(void)
     cpt100msec++;
     if (cpt100msec >= TEMPO_100msec) {
         cpt100msec = 0;
+
+        otos_error_t err;
+    	otos_pose2d_t pos;
+    	err = Application.m_otos_xyteta.getPosition(pos);
+    	printf("{%f, %f, %f}\n\r", pos.x, pos.y, pos.h);
     }
 
     // ______________________________
