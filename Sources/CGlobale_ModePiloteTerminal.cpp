@@ -40,6 +40,7 @@ void CGlobale::ReceiveRS232_ModePiloteTerminal(void)
 void CGlobale::SequenceurModePiloteTerminal(void)
 {
     static unsigned int cpt1msec = 0;
+    static unsigned int cpt5msec = 0;
     static unsigned int cpt10msec = 0;
     static unsigned int cpt20msec = 0;
     static unsigned int cpt50msec = 0;
@@ -55,32 +56,33 @@ void CGlobale::SequenceurModePiloteTerminal(void)
     cpt1msec++;
     if (cpt1msec >= TEMPO_1msec) {
         cpt1msec = 0;
+        m_codeurs.Traitement();
     }
+    // ______________________________
+    cpt5msec++;
+    if (cpt5msec >= TEMPO_5msec) {
+        cpt5msec = 0;
 
+        m_asservissement.CalculsMouvementsRobots();
+    }
     // ______________________________
     cpt10msec++;
     if (cpt10msec >= TEMPO_10msec) {
         cpt10msec = 0;
 
     }
-
     // ______________________________
     cpt20msec++;
     if (cpt20msec >= TEMPO_20msec) {
         cpt20msec = 0;
 
         m_telemetre.periodicCall();
-        //m_asservissement.CalculsMouvementsRobots();
-        m_asservissement.executerAsservissement();
     }
-
-
     // ______________________________
     cpt50msec++;
     if (cpt50msec >= TEMPO_50msec) {
         cpt50msec = 0;
     }
-
     // ______________________________
     cpt100msec++;
     if (cpt100msec >= TEMPO_100msec) {
@@ -91,7 +93,6 @@ void CGlobale::SequenceurModePiloteTerminal(void)
     	err = Application.m_otos_xyteta.getPosition(pos);
     	printf("{%f, %f, %f}\n\r", pos.x, pos.y, pos.h);
     }
-
     // ______________________________
     cpt200msec++;
     if (cpt200msec >= TEMPO_200msec) {

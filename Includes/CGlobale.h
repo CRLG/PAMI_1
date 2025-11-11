@@ -7,6 +7,9 @@
 #include "RessourcesHardware.h"
 #include "console_interactive_menu.h"
 #include "ssd1306.h"
+#include "CCodeurs.h"
+#include "CRoues.h"
+#include "CMoteurs.h"
 #include "CAsservissement.h"
 #include "CTelemetre.h"
 #include "OTOS_XYTeta.h"
@@ -20,6 +23,7 @@ typedef enum {
 // Pour le séquenceur de tâche
 #define PERIODE_TICK    (1)
 #define TEMPO_1msec     (1/PERIODE_TICK)
+#define TEMPO_5msec     (5/PERIODE_TICK)
 #define TEMPO_10msec    (10/PERIODE_TICK)
 #define TEMPO_20msec    (20/PERIODE_TICK)
 #define TEMPO_50msec    (50/PERIODE_TICK)
@@ -49,27 +53,18 @@ public :
 
     CMenuApp m_menu_interactive;
     SSD1306 m_lcd;
+    //! Gestion des codeurs de position
+    CCodeurs m_codeurs;
+    //! La gestion des roues gauches et droites
+    CRoues m_roues;
+    //! Gestion des moteurs
+    CMoteurs m_moteurs;
+
     CAsservissement m_asservissement;
     CTelemetre m_telemetre;
     OtosXYTeta m_otos_xyteta;
 
 private : 
-
-    //variables pour la stratégie
-    int couleur_equipe;
-    bool fin_match;
-    int compteur_action;
-    bool action_toggle;
-    float duree_match;
-    int ETAPE;
-    float signe_equipe;
-
-    //! Initialisation de la stratégie
-    void initStrategie();
-    //! pas élémentaire d'execution de la stratégie
-    void Strategie();
-    void TestAssert();
-
     //! Gestion du mode autonome
     void ModeAutonome(void);
     //! Sequenceur de taches en mode autonome
@@ -80,10 +75,8 @@ private :
     void SequenceurModePiloteTerminal(void);
 
 
-
     //! Gestion du mode piloté via Anaconbot
     void ModePiloteLaBotBox(void);
-
     //! Gestion du mode piloté par terminal
     void ModePiloteTerminal(void);
     //! Reception RS232 en IRQ

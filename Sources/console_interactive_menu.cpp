@@ -353,15 +353,11 @@ bool CMenuApp::read_telemetre()
 //                  ASSERVISSEMENT
 // ===========================================================
 bool CMenuApp::asser_stop () {
-    Application.m_asservissement.stopAsservissement();
     return true;
 }
 
 bool CMenuApp::asser_resetPos()
 {
-    Application.m_asservissement.stopAsservissement();
-    Application.m_asservissement.Initialisation_PID();
-    Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
     return true;
 
 }
@@ -424,19 +420,6 @@ bool CMenuApp::asser_avant100 () {
 bool CMenuApp::asser_arriere10 () {
     Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
     Application.m_asservissement.CommandeMouvementXY(-10.,0.);
-    Application.m_asservissement.newTarget = true;
-
-//    // Asservissement actif tant que la target n'est pas atteinte
-//    while (!CMenuApp::m_asservissement.coordonneesAtteintes) {
-//        static unsigned int cpt20msec = 0;
-//        cpt20msec++;
-//        if (cpt20msec >= TEMPO_20msec) {
-//            cpt20msec = 0;
-
-//            toggleLedBuiltin();
-//            m_asservissement.executerAsservissement();
-//        }
-//    }
     return true;
 }
 
@@ -477,11 +460,6 @@ bool CMenuApp::asser_arriere100 () {
 }
 
 bool CMenuApp::get_xy_asser () {
-    //m_asservissement.currentX = 10.1;
-    _printf("x = %f, y = %f, theta=%f\n\r", Application.m_asservissement.currentX, Application.m_asservissement.currentY, Application.m_asservissement.currentTheta);
-    _printf("erreur dist = %f\t\terreur angle = %f\n\r", Application.m_asservissement.erreur_distance, Application.m_asservissement.erreur_angle);
-    _printf("cde gauche = %f\t\tcde droite = %f\n\r", Application.m_asservissement.cde_gauche, Application.m_asservissement.cde_droite);
-    _printf("convergence = %d, demande mouvement = %d\n\r", Application.m_asservissement.coordonneesAtteintes, Application.m_asservissement.newTarget);
     return true;
 }
 

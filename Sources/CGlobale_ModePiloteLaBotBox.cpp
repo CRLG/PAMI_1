@@ -30,6 +30,7 @@ void CGlobale::ModePiloteLaBotBox(void)
 void CGlobale::SequenceurModePiloteLaBotBox(void)
 {
     static unsigned int cpt1msec= 0;
+    static unsigned int cpt5msec = 0;
     static unsigned int cpt10msec = 0;
     static unsigned int cpt20msec = 0;
     static unsigned int cpt50msec = 0;
@@ -42,6 +43,7 @@ void CGlobale::SequenceurModePiloteLaBotBox(void)
     cpt1msec++;
     if (cpt1msec >= TEMPO_1msec) {
         cpt1msec = 0;
+        m_codeurs.Traitement();
     }
 
     // ______________________________

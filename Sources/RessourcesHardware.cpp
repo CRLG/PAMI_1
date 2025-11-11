@@ -64,19 +64,58 @@ void CdeMoteur2(float cde_pourcent)
 }
 
 
+// ===================================================
+//              COMMANDES MOTEURS
+// ===================================================
+
+/*!
+ * \brief Commande de moteur
+ * \param num_moteur numéro du moteur entre 1 et 4
+ * \param cde_pourcent valeur signée du PWM
+ * PWM = PeriodTimer * (cde_pourcent / 100)
+ *      PeriodTimer = 9600 (htim<xxx>.Init.Period = 9600)
+ *      PWM = 9600/100 * cde_pourcent
+ *      PWM = 96 * cde_pourcent
+ *      (valable pour les 3 timers TIM15, 16, 17)
+ */
+void CdeMoteur(unsigned char num_moteur, float cde_pourcent)
+{
+    switch(num_moteur)
+    {
+    case 1 : CdeMoteur1(cde_pourcent); break;
+    case 2 : CdeMoteur2(cde_pourcent); break;
+    default : break;
+    }
+}
+
 
 // ===================================================
 //                      CODEURS
 // ===================================================
 
+// ===================================================
+//                      CODEURS
+// ===================================================
+
+int getCodeur(int num)
+{
+	switch(num)
+	{
+	case 1 : return getCodeur1(); break;
+	case 2 : return getCodeur2(); break;
+	default: break;
+	}
+	return 0;
+}
+
 // --------------------------------------------------
-short getCodeur1()
+int getCodeur1()
 {
     return __HAL_TIM_GET_COUNTER(&htim2);
 }
 
 // --------------------------------------------------
-short getCodeur2()
+int getCodeur2()
 {
     return __HAL_TIM_GET_COUNTER(&htim3);
 }
