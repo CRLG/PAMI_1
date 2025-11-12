@@ -39,7 +39,6 @@ void CGlobale::SequenceurModeAutonome(void)
     static unsigned int cpt200msec = 0;
     static unsigned int cpt500msec = 0;
     static unsigned int cpt1sec = 0;
-    static bool old_match_en_cours=0;
 
     // ______________________________
     cpt1msec++;

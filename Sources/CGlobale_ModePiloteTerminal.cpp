@@ -91,7 +91,12 @@ void CGlobale::SequenceurModePiloteTerminal(void)
         otos_error_t err;
     	otos_pose2d_t pos;
     	err = Application.m_otos_xyteta.getPosition(pos);
-    	printf("{%f, %f, %f}\n\r", pos.x, pos.y, pos.h);
+/*
+    	printf("Otos: {%f, %f, %f} / Asserv: {%f, %f, %f}\n\r",
+    			pos.x, pos.y, pos.h,
+				m_asservissement.X_robot, m_asservissement.Y_robot, m_asservissement.angle_robot/M_PI*180);
+    	printf("Codeur : {%d, %d}\n\r", m_roues.getCodeurG(), m_roues.getCodeurD());
+*/
     }
     // ______________________________
     cpt200msec++;

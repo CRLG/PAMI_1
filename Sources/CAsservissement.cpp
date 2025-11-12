@@ -6,9 +6,9 @@
 #include "CGlobale.h"
 
 // Constantes spécifiques au robot
-const float CAsservissementBase::DISTANCE_PAR_PAS_CODEUR_G = 0.003189567f;  // (27/04/2025)
-const float CAsservissementBase::DISTANCE_PAR_PAS_CODEUR_D = 0.003200126f;  // (27/04/2025)
-const float CAsservissementBase::VOIE_ROBOT = 30.7;                         // (27/04/2025)
+const float CAsservissementBase::DISTANCE_PAR_PAS_CODEUR_G = (24.f/461.f);  // 24cm pour 461pas
+const float CAsservissementBase::DISTANCE_PAR_PAS_CODEUR_D = (24.f/461.f);  //
+const float CAsservissementBase::VOIE_ROBOT = 10;
 
 // Cartos spécifique au robo
 const float CAsservissementBase::ini_conv_erreur_dist_vitesse_cur_x[NBRE_POINTS_CARTO_ERREUR] = {-40, -20, -10, -4, -2, -1, 0, 1, 2, 4, 10, 20, 40};							// [cm]

@@ -45,7 +45,13 @@ void CGlobale::SequenceurModePiloteLaBotBox(void)
         cpt1msec = 0;
         m_codeurs.Traitement();
     }
+    // ______________________________
+    cpt5msec++;
+    if (cpt5msec >= TEMPO_5msec) {
+        cpt5msec = 0;
 
+        m_asservissement.CalculsMouvementsRobots();
+    }
     // ______________________________
     cpt10msec++;
     if (cpt10msec >= TEMPO_10msec) {

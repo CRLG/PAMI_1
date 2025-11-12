@@ -161,86 +161,86 @@ bool CMenuApp::action_read_params()
 
 bool CMenuApp::action_moteurG_stop()
 {
-    CdeMoteur1(0);
+    Application.m_roues.AdapteCommandeMoteur_G(0);
     return true;
 }
 
 bool CMenuApp::action_moteurG_10pct()
 {
-    CdeMoteur1(10);
+    Application.m_roues.AdapteCommandeMoteur_G(10);
     return true;
 }
 
 bool CMenuApp::action_moteurG_50pct()
 {
-    CdeMoteur1(60);
+    Application.m_roues.AdapteCommandeMoteur_G(60);
     return true;
 }
 
 bool CMenuApp::action_moteurG_100pct()
 {
-    CdeMoteur1(100);
+    Application.m_roues.AdapteCommandeMoteur_G(100);
     return true;
 }
 
 bool CMenuApp::action_moteurG_M10pct()
 {
-    CdeMoteur1(-10);
+    Application.m_roues.AdapteCommandeMoteur_G(-10);
     return true;
 }
 
 bool CMenuApp::action_moteurG_M50pct()
 {
-    CdeMoteur1(-50);
+    Application.m_roues.AdapteCommandeMoteur_G(-50);
     return true;
 }
 
 bool CMenuApp::action_moteurG_M100pct()
 {
-    CdeMoteur1(-100);
+    Application.m_roues.AdapteCommandeMoteur_G(-100);
     return true;
 }
 
 
 bool CMenuApp::action_moteurD_stop()
 {
-    CdeMoteur2(0);
+    Application.m_roues.AdapteCommandeMoteur_D(0);
     return true;
 }
 
 bool CMenuApp::action_moteurD_10pct()
 {
-    CdeMoteur2(10);
+    Application.m_roues.AdapteCommandeMoteur_D(10);
     return true;
 }
 
 bool CMenuApp::action_moteurD_50pct()
 {
-    CdeMoteur2(59);
+    Application.m_roues.AdapteCommandeMoteur_D(59);
     return true;
 }
 
 bool CMenuApp::action_moteurD_100pct()
 {
-    CdeMoteur2(100);
+    Application.m_roues.AdapteCommandeMoteur_D(100);
     return true;
 }
 
 bool CMenuApp::action_moteurD_M10pct()
 {
-    CdeMoteur2(-10);
+    Application.m_roues.AdapteCommandeMoteur_D(-10);
     return true;
 }
 
 bool CMenuApp::action_moteurD_M50pct()
 {
-    CdeMoteur2(-50);
+    Application.m_roues.AdapteCommandeMoteur_D(-50);
     return true;
 }
 
 bool CMenuApp::action_moteurD_M100pct()
 {
-    CdeMoteur2(-100);
+    Application.m_roues.AdapteCommandeMoteur_D(-100);
     return true;
 }
 
@@ -353,7 +353,9 @@ bool CMenuApp::read_telemetre()
 //                  ASSERVISSEMENT
 // ===========================================================
 bool CMenuApp::asser_stop () {
-    return true;
+    Application.m_roues.AdapteCommandeMoteur_G(0);
+    Application.m_roues.AdapteCommandeMoteur_D(0);
+	return true;
 }
 
 bool CMenuApp::asser_resetPos()
@@ -364,7 +366,8 @@ bool CMenuApp::asser_resetPos()
 
 bool CMenuApp::asser_avant10 () {
     //Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
-    Application.m_asservissement.CommandeMouvementXY(10.,0.);
+    Application.m_roues.AdapteCommandeMoteur_G(20);
+    Application.m_roues.AdapteCommandeMoteur_D(20);
     //Application.m_asservissement.newTarget = true;
 
 //    // Asservissement actif tant que la target n'est pas atteinte
@@ -383,7 +386,8 @@ bool CMenuApp::asser_avant10 () {
 
 bool CMenuApp::asser_avant50 () {
     //Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
-    Application.m_asservissement.CommandeMouvementXY(50.,0.);
+    Application.m_roues.AdapteCommandeMoteur_G(60);
+    Application.m_roues.AdapteCommandeMoteur_D(60);
 
 //    // Asservissement actif tant que la target n'est pas atteinte
 //    while (!CMenuApp::m_asservissement.coordonneesAtteintes) {
@@ -418,14 +422,14 @@ bool CMenuApp::asser_avant100 () {
 }
 
 bool CMenuApp::asser_arriere10 () {
-    Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
-    Application.m_asservissement.CommandeMouvementXY(-10.,0.);
+    Application.m_roues.AdapteCommandeMoteur_G(-20);
+    Application.m_roues.AdapteCommandeMoteur_D(-20);
     return true;
 }
 
 bool CMenuApp::asser_arriere50 () {
-    Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
-    Application.m_asservissement.CommandeMouvementXY(-50.,0.);
+    Application.m_roues.AdapteCommandeMoteur_G(-40);
+    Application.m_roues.AdapteCommandeMoteur_D(-40);
 
 //    // Asservissement actif tant que la target n'est pas atteinte
 //    while (!CMenuApp::m_asservissement.coordonneesAtteintes) {

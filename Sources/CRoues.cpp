@@ -25,7 +25,7 @@ CRoues::CRoues()
 */
 void CRoues::AdapteCommandeMoteur_G(float vitesse)
 {
-    Application.m_moteurs.CommandeVitesse(CMoteurs::MOTEUR_1, vitesse);
+    Application.m_moteurs.CommandeVitesse(CMoteurs::MOTEUR_2, vitesse);
     m_cde_roue_G = vitesse;
 }
 
@@ -39,7 +39,7 @@ void CRoues::AdapteCommandeMoteur_G(float vitesse)
 */
 void CRoues::AdapteCommandeMoteur_D(float vitesse)
 {
-    Application.m_moteurs.CommandeVitesse(CMoteurs::MOTEUR_2, vitesse);
+    Application.m_moteurs.CommandeVitesse(CMoteurs::MOTEUR_1, vitesse);
     m_cde_roue_D = vitesse;
 }
 
@@ -52,7 +52,7 @@ void CRoues::AdapteCommandeMoteur_D(float vitesse)
 */
 int CRoues::getCodeurG(void)
 {
-    return(Application.m_codeurs.m_CumulCodeurPosition1);
+    return(-1*Application.m_codeurs.m_CumulCodeurPosition2);
 }
 
 
@@ -65,7 +65,7 @@ int CRoues::getCodeurG(void)
 */
 int CRoues::getCodeurD(void)
 {
-    return(Application.m_codeurs.m_CumulCodeurPosition2);
+    return(Application.m_codeurs.m_CumulCodeurPosition1);
 }
 
 
