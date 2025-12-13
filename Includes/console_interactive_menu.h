@@ -21,6 +21,8 @@ public:
     void page_servos();
     void page_asservissement();
 
+    bool _reset_cpu();
+
     void page_set_param_1();
     void page_set_param_2();
 
@@ -90,6 +92,7 @@ public:
     void page_otos();
     bool otos_read_version();
     bool otos_read_position();
+    bool otos_reset_tracking();
 
 
 

@@ -13,6 +13,8 @@ extern "C" {
 #define I2C_HDL_ELECTROBOT hi2c2
 #define I2C_DEFAULT_TIMEOUT (100)
 
+#define RESET_CPU_SECURE_CODE (0x5A69)
+
 void setLedBuiltin(bool state);
 void toggleLedBuiltin();
 void CdeMoteur1(float cde_pourcent);
@@ -26,6 +28,7 @@ int getCodeur2();
 int getCodeur(int num);
 unsigned int readAnalog(int channel);
 float readAnalogVolt(int channel);
+void reset_cpu(unsigned int secure_code);
 
 #ifdef __cplusplus
 }

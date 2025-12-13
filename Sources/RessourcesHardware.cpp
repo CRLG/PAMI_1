@@ -183,3 +183,11 @@ void CdeServo3(int ppm1500)
 {
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, (float)(ppm1500/1e6) / ((float)T_PWM_SERVO/64000));
 }
+
+// ===================================================
+//                  Reset CPU
+// ===================================================
+void reset_cpu(unsigned int secure_code)
+{
+    if (secure_code == RESET_CPU_SECURE_CODE)  NVIC_SystemReset();
+}

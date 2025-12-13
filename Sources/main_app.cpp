@@ -10,7 +10,7 @@ CGlobale Application;
 
 // --------------------------------------------------
 uint8_t uart_irq_rxbuff[1];
-void irq_uart2()
+void irq_uart_stlink()
 {
     //HAL_UART_Transmit(&huart2, uart_irq_rxbuff, 1, 100);
     Application.m_menu_interactive.receive_car(uart_irq_rxbuff[0]);

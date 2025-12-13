@@ -29,9 +29,16 @@ void CMenuApp::page1()
     DECLARE_OPTION('a', "Commande moteurs", CMenuApp::page_cde_moteurs);
     DECLARE_OPTION('z', "Commande servo", CMenuApp::page_servos);
     DECLARE_OPTION('e', "Capteurs", CMenuApp::page_capteurs);
-    DECLARE_OPTION('r', "I2C", CMenuApp::page_i2c);
+    DECLARE_OPTION('i', "I2C", CMenuApp::page_i2c);
     DECLARE_OPTION('o', "Odometry OTOS", CMenuApp::page_otos);
     DECLARE_OPTION('t', "Asservissement", CMenuApp::page_asservissement);
+    DECLARE_ACTION('r', "Reset CPU", CMenuApp::_reset_cpu);
+}
+
+bool CMenuApp::_reset_cpu()
+{
+    reset_cpu(RESET_CPU_SECURE_CODE);
+    return true;
 }
 
 void CMenuApp::page_cde_moteurs()
@@ -326,7 +333,9 @@ bool CMenuApp::page_servo3_2000()
 
 bool CMenuApp::read_codeurs()
 {
-    _printf("Codeur1: %d / Codeur2: %d\n\r", getCodeur1(), getCodeur2());
+    _printf("CodeurG: %d / CodeurD: %d\n\r",
+    		Application.m_roues.getCodeurG(),
+			Application.m_roues.getCodeurD());
     return true;
 }
 
@@ -353,113 +362,45 @@ bool CMenuApp::read_telemetre()
 //                  ASSERVISSEMENT
 // ===========================================================
 bool CMenuApp::asser_stop () {
-    Application.m_roues.AdapteCommandeMoteur_G(0);
-    Application.m_roues.AdapteCommandeMoteur_D(0);
+    Application.m_asservissement.CommandeManuelle(0, 0);
 	return true;
 }
 
 bool CMenuApp::asser_resetPos()
 {
     return true;
-
 }
 
-bool CMenuApp::asser_avant10 () {
-    //Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
-    Application.m_roues.AdapteCommandeMoteur_G(20);
-    Application.m_roues.AdapteCommandeMoteur_D(20);
-    //Application.m_asservissement.newTarget = true;
-
-//    // Asservissement actif tant que la target n'est pas atteinte
-//    while (!CMenuApp::m_asservissement.coordonneesAtteintes) {
-//        static unsigned int cpt20msec = 0;
-//        cpt20msec++;
-//        if (cpt20msec >= TEMPO_20msec) {
-//            cpt20msec = 0;
-
-//            toggleLedBuiltin();
-//            m_asservissement.executerAsservissement();
-//        }
-//    }
+bool CMenuApp::asser_avant10 ()
+{
+	Application.m_asservissement.CommandeMouvementDistanceAngle(10, 0);
     return true;
 }
 
 bool CMenuApp::asser_avant50 () {
-    //Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
-    Application.m_roues.AdapteCommandeMoteur_G(60);
-    Application.m_roues.AdapteCommandeMoteur_D(60);
+	Application.m_asservissement.CommandeMouvementDistanceAngle(50, 0);
 
-//    // Asservissement actif tant que la target n'est pas atteinte
-//    while (!CMenuApp::m_asservissement.coordonneesAtteintes) {
-//        static unsigned int cpt20msec = 0;
-//        cpt20msec++;
-//        if (cpt20msec >= TEMPO_20msec) {
-//            cpt20msec = 0;
-
-//            toggleLedBuiltin();
-//            m_asservissement.executerAsservissement();
-//        }
-//    }
     return true;
 }
 
 bool CMenuApp::asser_avant100 () {
-    //Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
-    Application.m_asservissement.CommandeMouvementXY(100.0,0.0);
+	Application.m_asservissement.CommandeMouvementDistanceAngle(100, 0);
 
-//    static unsigned int cpt20msec = 0;
-//    // Asservissement actif tant que la target n'est pas atteinte
-//    while (!CMenuApp::m_asservissement.coordonneesAtteintes) {
-//        cpt20msec++;
-//        if (cpt20msec >= TEMPO_20msec) {
-//            cpt20msec = 0;
-
-//            toggleLedBuiltin();
-//            m_asservissement.executerAsservissement();
-//        }
-//    }
     return true;
 }
 
 bool CMenuApp::asser_arriere10 () {
-    Application.m_roues.AdapteCommandeMoteur_G(-20);
-    Application.m_roues.AdapteCommandeMoteur_D(-20);
-    return true;
+	Application.m_asservissement.CommandeMouvementDistanceAngle(-10, 0);
+	return true;
 }
 
 bool CMenuApp::asser_arriere50 () {
-    Application.m_roues.AdapteCommandeMoteur_G(-40);
-    Application.m_roues.AdapteCommandeMoteur_D(-40);
-
-//    // Asservissement actif tant que la target n'est pas atteinte
-//    while (!CMenuApp::m_asservissement.coordonneesAtteintes) {
-//        static unsigned int cpt20msec = 0;
-//        cpt20msec++;
-//        if (cpt20msec >= TEMPO_20msec) {
-//            cpt20msec = 0;
-
-//            toggleLedBuiltin();
-//            m_asservissement.executerAsservissement();
-//        }
-//    }
+	Application.m_asservissement.CommandeMouvementDistanceAngle(-50, 0);
     return true;
 }
 
 bool CMenuApp::asser_arriere100 () {
-    Application.m_asservissement.setPosition_XYTeta(0.,0.,0.);
-    Application.m_asservissement.CommandeMouvementXY(-100.0,0.0);
-
-//    static unsigned int cpt20msec = 0;
-//    // Asservissement actif tant que la target n'est pas atteinte
-//    while (!CMenuApp::m_asservissement.coordonneesAtteintes) {
-//        cpt20msec++;
-//        if (cpt20msec >= TEMPO_20msec) {
-//            cpt20msec = 0;
-
-//            toggleLedBuiltin();
-//            m_asservissement.executerAsservissement();
-//        }
-//    }
+	Application.m_asservissement.CommandeMouvementDistanceAngle(-100, 0);
     return true;
 }
 
@@ -515,6 +456,7 @@ void CMenuApp::page_otos()
     DECLARE_PAGE("Odometry OTOS", CMenuApp::page_otos);
     DECLARE_ACTION('v', "Read Version", CMenuApp::otos_read_version);
     DECLARE_ACTION('p', "Read Position", CMenuApp::otos_read_position);
+    DECLARE_ACTION('r', "Reset tracking", CMenuApp::otos_reset_tracking);
 
 }
 
@@ -535,5 +477,11 @@ bool CMenuApp::otos_read_position()
 	err = Application.m_otos_xyteta.getPosition(pos);
 	_printf("Position x, y, teta= {%f, %f, %f} \n\r", pos.x, pos.y, pos.h);
 
+	return true;
+}
+
+bool CMenuApp::otos_reset_tracking()
+{
+	Application.m_otos_xyteta.resetTracking();
 	return true;
 }
